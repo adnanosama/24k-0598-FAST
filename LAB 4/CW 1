@@ -1,0 +1,91 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class matrix{
+    private:
+    int x;
+    int y;
+    double **elements;
+    public:
+    matrix(){
+        x=0;
+        y=0;
+    }
+    matrix(int r,int c): x(r), y(c){
+        elements = new double*[r];
+        for (int i = 0; i < r; i++)
+        {
+            elements[i]=new double[y];
+        }
+        
+        for (int i = 0; i < x; i++)
+        {
+            for (int j = 0; j < y; y++)
+            {
+                elements[i][j]=0;
+            }
+            
+        }
+        
+    }
+    matrix(const matrix& other) : x(other.x), y(other.y) {
+        elements= new double*[x];
+        for (int i = 0; i < x; ++i) {
+            for (int j = 0; j < y; ++j) {
+                elements[i][j]=other.elements[x][y];
+            }
+        }
+    }
+    matrix(matrix&& m) noexcept : x(m.x), y(m.y), elements(m.elements){
+        m.x=0;
+        m.y=0;
+        m.elements=nullptr;
+    }
+    ~matrix(){
+        for (int i = 0; i < x; ++i) {
+            delete[] elements[i];
+        }
+        delete[] elements;
+    }
+    int getrows(){
+        return x;
+    }
+    int getcol(){
+        return y;
+    }
+    double& at(int x,int y){
+        return elements[x][y];
+    }
+    void fill(double value){
+        for (int i = 0; i < x; i++)
+        {
+            for (int j = 0; j < y; j++)
+            {
+                elements[i][j]=value;
+            }
+            
+        }
+        
+    }
+     matrix transpose() const {
+        matrix transposed(x, y);
+        for (int i = 0; i < x; ++i) {
+            for (int j = 0; j < y; ++j) {
+                transposed.elements[j][i] = elements[i][j];
+            }
+        }
+
+        transposed.print();
+        return transposed;
+    }
+    void print() const {
+    for (int i = 0; i < x; ++i) {  
+        for (int j = 0; j < y; ++j) {  
+            cout << elements[x][y] << " "; 
+        }
+        cout << "\n";
+    }
+}
+};
