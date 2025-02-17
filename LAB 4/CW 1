@@ -14,15 +14,15 @@ class matrix{
         y=0;
     }
     matrix(int r,int c): x(r), y(c){
-        elements = new double*[r];
-        for (int i = 0; i < r; i++)
+        elements = new double*[x];
+        for (int i = 0; i < x; i++)
         {
             elements[i]=new double[y];
         }
         
         for (int i = 0; i < x; i++)
         {
-            for (int j = 0; j < y; y++)
+            for (int j = 0; j < y; j++)
             {
                 elements[i][j]=0;
             }
@@ -33,8 +33,9 @@ class matrix{
     matrix(const matrix& other) : x(other.x), y(other.y) {
         elements= new double*[x];
         for (int i = 0; i < x; ++i) {
+            elements[i] = new double[y];
             for (int j = 0; j < y; ++j) {
-                elements[i][j]=other.elements[x][y];
+                elements[i][j]=other.elements[i][j];
             }
         }
     }
@@ -44,15 +45,17 @@ class matrix{
         m.elements=nullptr;
     }
     ~matrix(){
-        for (int i = 0; i < x; ++i) {
-            delete[] elements[i];
+        if (elements) {
+            for (int i = 0; i < x; ++i) {
+                delete[] elements[i];
+            }
+            delete[] elements;
         }
-        delete[] elements;
     }
     int getrows(){
         return x;
     }
-    int getcol(){
+    int getcols(){
         return y;
     }
     double& at(int x,int y){
@@ -70,22 +73,34 @@ class matrix{
         
     }
      matrix transpose() const {
-        matrix transposed(x, y);
+        matrix transposed(y, x);
         for (int i = 0; i < x; ++i) {
             for (int j = 0; j < y; ++j) {
                 transposed.elements[j][i] = elements[i][j];
             }
         }
 
-        transposed.print();
         return transposed;
     }
     void print() const {
     for (int i = 0; i < x; ++i) {  
         for (int j = 0; j < y; ++j) {  
-            cout << elements[x][y] << " "; 
+            cout << elements[i][j] << " "; 
         }
         cout << "\n";
     }
 }
 };
+
+int main(){
+    matrix m(2,2);
+    m.at(0,0)=1;
+    m.at(0,1)=2;
+    m.at(1,0)=3;
+    m.at(1,1)=4;    
+    m.print();
+    matrix m2(m);
+    m2.print();
+    matrix t = m.transpose();
+    t.print();
+}
